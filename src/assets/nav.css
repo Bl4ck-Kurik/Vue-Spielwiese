@@ -1,0 +1,66 @@
+/* .nav {
+    margin-top: 60px;
+} */
+.nav-item {
+    background-color: darkslategray;
+    vertical-align: top;
+    display: inline-flex;
+    position: relative;
+    align-items: center;
+    height: auto;
+    transition: ease 0.3s;
+}
+.nav-item:hover {
+    background-color: rgb(64, 107, 107);
+    transition: ease 0.3s;
+}
+.nav-item:first-child {
+    border-radius: 5px 0 0 5px;
+}
+.nav-item:last-child {
+    border-radius: 0 5px 5px 0;
+}
+.nav-item h3 {
+    color: #fff;
+    vertical-align: center;
+    /* position: relative;
+    top: -13px; */
+    pointer-events: none;
+}
+.nav-link {
+    padding: 0 10px 0 10px;
+    cursor: pointer;
+}
+.sub {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 150px;
+    background-color: rgb(71, 119, 119);
+    padding: 0 10px 0 10px;
+    border-radius: 5px;
+}
+.sub p {
+    text-align: left;
+    color: #fff;
+    cursor: pointer;
+}
+.slide-fade-enter-from {
+    transform-origin: top;
+    transform: scaleY(0);
+}
+.slide-fade-enter-to {
+    transform-origin: top;
+    transform: scaleY(1);
+}
+.slide-fade-leave-from {
+    transform-origin: top;
+    transform: scaleY(1);
+}
+.slide-fade-leave-to {
+    transform-origin: top;
+    transform: scaleY(0);
+}
+.slide-fade-enter-active, .slide-fade-leave-active {
+    transition: all 0.3s ease;
+}
