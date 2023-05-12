@@ -24,6 +24,9 @@
   </div>
   <button @click.alt="toggleModalTwo">open modal (alt)</button>
 
+  <h2 style="margin-top: 50px;">Ninja React Timer</h2>
+  <button @click="start">play</button>
+  
   <h2 style="margin-top: 50px;">Standart Nav</h2>
   <p>Anzahl der Tabs und Sub-menü punkte <strong>NICHT</strong> frei wählbar</p>
   
@@ -82,6 +85,8 @@ export default {
       text: 'Get the new Skull trooper (swag)!',
       showModal: false,
       showModalTwo: false,
+      isPlaying: false,
+      delay: null,
       navItems: [
         {
           label: "Tab 1",
@@ -125,6 +130,11 @@ export default {
     },
     toggleModalTwo () {
       this.showModalTwo = !this.showModalTwo
+    },
+    start () {
+      this.delay = 2000 + Math.random() * 5000
+      this.isPlaying = true
+      console.log(this.delay)
     }
   },
   components: {
