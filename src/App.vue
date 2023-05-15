@@ -25,7 +25,9 @@
   <button @click.alt="toggleModalTwo">open modal (alt)</button>
 
   <h2 style="margin-top: 50px;">Ninja React Timer</h2>
-  <button @click="start">play</button>
+  <button @click="start" :disabled="isPlaying">play</button>
+  <Block v-if="isPlaying" :delay="delay" @end="endGame"/>
+  <p v-if="showResults">Reaction time: {{ score }}ms</p>
   
   <h2 style="margin-top: 50px;">Standart Nav</h2>
   <p>Anzahl der Tabs und Sub-menü punkte <strong>NICHT</strong> frei wählbar</p>
@@ -75,6 +77,7 @@
 import Modal from './components/Modal.vue'
 import Nav from './components/Nav.vue'
 import FlexNav from './components/FlexNav.vue'
+import Block from './components/Block.vue'
 
 export default {
   name: 'App',
@@ -87,6 +90,8 @@ export default {
       showModalTwo: false,
       isPlaying: false,
       delay: null,
+      score: null,
+      showResults: false,
       navItems: [
         {
           label: "Tab 1",
@@ -134,13 +139,19 @@ export default {
     start () {
       this.delay = 2000 + Math.random() * 5000
       this.isPlaying = true
-      console.log(this.delay)
+      this.showResults = false
+    },
+    endGame (reactionTime) {
+      this.score = reactionTime
+      this.isPlaying = false
+      this.showResults = true
     }
   },
   components: {
     Modal,
     Nav,
-    FlexNav
+    FlexNav,
+    Block
   }
 }
 </script>
@@ -152,6 +163,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin: 60px 0 120px;
 }
 </style>
