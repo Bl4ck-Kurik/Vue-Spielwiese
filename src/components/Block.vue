@@ -2,6 +2,7 @@
     <div class="block" v-if="showBlock" @click="stopTimer">
         click me
     </div>
+    <div class="block-red" v-if="!showBlock" @click="stopTimer">click when green!</div>
 </template>
 <script>
 export default {
@@ -36,8 +37,17 @@ export default {
     .block {
         width: 400px;
         border-radius: 20px;
-        background: #0faf87;
-        color: white;
+        background: #69bda8;
+        color: #101d1a;
+        text-align: center;
+        padding: 100px 0;
+        margin: 40px auto;
+    }
+    .block-red {
+        width: 400px;
+        border-radius: 20px;
+        background: #e06b63;
+        color: #4e0702;
         text-align: center;
         padding: 100px 0;
         margin: 40px auto;
