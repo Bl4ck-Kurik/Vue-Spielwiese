@@ -1,7 +1,5 @@
 <template>
-    <div class="block" v-if="showBlock" @click="stopTimer">
-        click me
-    </div>
+    <div class="block" v-if="showBlock" @click="stopTimer">click me</div>
     <div class="block-red" v-if="!showBlock" @click="stopTimer">click when green!</div>
 </template>
 <script>
@@ -42,6 +40,7 @@ export default {
         text-align: center;
         padding: 100px 0;
         margin: 40px auto;
+        cursor: pointer;
     }
     .block-red {
         width: 400px;
@@ -51,5 +50,6 @@ export default {
         text-align: center;
         padding: 100px 0;
         margin: 40px auto;
+        cursor: wait;
     }
 </style>

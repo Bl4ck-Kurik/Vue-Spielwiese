@@ -2,6 +2,10 @@ body {
     margin: 0;
     background-color: #000;
 }
+::selection {
+    background-color: rgb(230, 160, 230);
+    color: rgb(70, 0, 70);
+}
 h1 {
     color: rgb(208, 161, 223);
 }
@@ -27,6 +31,11 @@ button {
     font-weight: 600;
     cursor: pointer;
     margin: 0 3px 0 3px;
+}
+button:disabled,
+button[disabled]{
+    opacity: 50%;
+    cursor: not-allowed;
 }
 button.large-button {
     padding: 10px 15px;
