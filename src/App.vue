@@ -68,7 +68,7 @@
 
   <h2 style="margin-top: 50px;">Flex Nav</h2>
   <p>Anzahl der Tabs und Sub-menü punkte frei wählbar</p>
-
+  
   <FlexNav :items="navItems" />
   <router-view />
 
@@ -80,6 +80,9 @@ import Nav from './components/Nav.vue'
 import FlexNav from './components/FlexNav.vue'
 import Block from './components/Block.vue'
 import Results from './components/Results.vue'
+import Taskinput from './components/TaskInput.vue'
+import TaskList from './components/TaskList.vue'
+import TaskItem from './components/TaskItem.vue'
 
 export default {
   name: 'App',
@@ -154,7 +157,10 @@ export default {
     Nav,
     FlexNav,
     Block,
-    Results
+    Results,
+    Taskinput,
+    TaskList,
+    TaskItem
   }
 }
 </script>
