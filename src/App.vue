@@ -70,8 +70,8 @@
   <p>Anzahl der Tabs und Sub-menü punkte frei wählbar</p>
   
   <FlexNav :items="navItems" />
-  <router-view />
 
+  <SignupForm/>
 </template>
 
 <script>
@@ -83,6 +83,7 @@ import Results from './components/Results.vue'
 import Taskinput from './components/TaskInput.vue'
 import TaskList from './components/TaskList.vue'
 import TaskItem from './components/TaskItem.vue'
+import SignupForm from "./components/SignupForm.vue"
 
 export default {
   name: 'App',
@@ -160,7 +161,8 @@ export default {
     Results,
     Taskinput,
     TaskList,
-    TaskItem
+    TaskItem,
+    SignupForm
   }
 }
 </script>
