@@ -1,10 +1,11 @@
 <template>
-    <form>
+    <form @submit.prevent="handleSubmit">
         <label>Email:</label>
         <input type="email" required v-model="email">
 
         <label>Password:</label>
         <input type="password" required v-model="password">
+        <div v-if="passwordError" class="error">{{ passwordError }}</div>
 
         <label>Role:</label>
         <select v-model="role">
@@ -23,6 +24,10 @@
             <label>Accept terms and conditions</label>
         </div>
 
+        <div class="submit">
+            <button>Create an Account</button>
+        </div>
+
     </form>
     <p>Email: {{ email }}</p>
     <p>Password: {{ password }}</p>
@@ -39,6 +44,7 @@ export default {
             terms: false,
             tempSkill: '',
             skills: [],
+            passwordError: '',
         }
     },
     methods: {
@@ -55,6 +61,17 @@ export default {
             this.skills = this.skills.filter((item) => {
                 return skill !== item
             })
+        },
+        handleSubmit() {
+            this.passwordError = this.password.length > 5 ? '' : 'Password must be at least 6 chars long'
+
+            if (!this.passwordError) {
+                console.log('email', this.email)
+                console.log('password', this.password)
+                console.log('role', this.role)
+                console.log('skills', this.skills)
+                console.log('terms accepted', this.terms)
+            }
         },
     },
 }
@@ -105,5 +122,19 @@ export default {
         font-weight: bold;
         color: rgba(255, 255, 255, 0.8);
         cursor: pointer;
+    }
+    .submit {
+        text-align: center;
+    }
+    .submit>button {
+        border-radius: 20px;
+        padding: 10px 20px;
+        margin-top: 20px;
+    }
+    .error {
+        color: #ff5555;
+        margin-top: 10px;
+        font-size: 0.8em;
+        font-weight: bold;
     }
 </style>
