@@ -72,6 +72,8 @@
   <FlexNav :items="navItems" />
 
   <SignupForm/>
+
+  <TodoList/>
 </template>
 
 <script>
@@ -80,10 +82,8 @@ import Nav from './components/Nav.vue'
 import FlexNav from './components/FlexNav.vue'
 import Block from './components/Block.vue'
 import Results from './components/Results.vue'
-import Taskinput from './components/TaskInput.vue'
-import TaskList from './components/TaskList.vue'
-import TaskItem from './components/TaskItem.vue'
 import SignupForm from './components/SignupForm.vue'
+import TodoList from './components/TodoList.vue'
 
 export default {
   name: 'App',
@@ -159,10 +159,8 @@ export default {
     FlexNav,
     Block,
     Results,
-    Taskinput,
-    TaskList,
-    TaskItem,
-    SignupForm
+    SignupForm,
+    TodoList,
   }
 }
 </script>
