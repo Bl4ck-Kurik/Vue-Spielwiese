@@ -1,6 +1,6 @@
 <template>
   <h1>{{ title }}</h1>
-  <div v-if="showModal">
+  <!-- <div v-if="showModal">
     <Modal theme="sale" @close="toggleModal">
       <template v-slot:links>
         <a href="#">sign up now</a>
@@ -28,7 +28,7 @@
   <button class="large-button" @click="start" :disabled="isPlaying">play</button>
   <Block v-if="isPlaying" :delay="delay" @end="endGame"/>
   <Results :score="score" v-if="showResults"/>
-  <!-- <p v-if="showResults">Reaction time: {{ score }}ms</p> -->
+  <p v-if="showResults">Reaction time: {{ score }}ms</p>
   
   <h2 style="margin-top: 50px;">Standart Nav</h2>
   <p>Anzahl der Tabs und Sub-menü punkte <strong>NICHT</strong> frei wählbar</p>
@@ -73,7 +73,9 @@
 
   <SignupForm/>
 
-  <TodoList/>
+  <TodoList/> -->
+
+  <NoteList/>
 </template>
 
 <script>
@@ -84,6 +86,7 @@ import Block from './components/Block.vue'
 import Results from './components/Results.vue'
 import SignupForm from './components/SignupForm.vue'
 import TodoList from './components/TodoList.vue'
+import NoteList from "./components/NoteList.vue";
 
 export default {
   name: 'App',
@@ -161,6 +164,7 @@ export default {
     Results,
     SignupForm,
     TodoList,
+    NoteList,
   }
 }
 </script>
