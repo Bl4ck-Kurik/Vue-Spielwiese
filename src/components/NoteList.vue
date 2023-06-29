@@ -2,19 +2,30 @@
     <div>
         <h2 style="margin-top: 30px;">Take Notes</h2>
         <button class="newNote" @click="showNotes">New Note</button>
-        <div v-if="newNote" class="newNote">
+        <div class="search">
+            <input type="text" v-model="searchQuery" placeholder="Search">
+            <select v-model="sortOrder">
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+            </select>
+        </div>
+        <div v-if="newNote" class="newNoteInput">
             <input class="title" type="text" placeholder="Title" v-model="newNoteTitle">
-            <textarea name="" id="" cols="30" rows="10" class="content" placeholder="Content" v-model="newNoteText"></textarea>
-            <button class="addNote" @click="addNote">Add Note</button>
+            <textarea cols="30" rows="10" class="content" placeholder="Content" v-model="newNoteText"></textarea>
+            <div class="editButtons">
+                <button class="addNote" @click="addNote">Add Note</button>
+                <button class="closeNote" @click="showNotes">Close</button>
+            </div>
         </div>
         <div class="notes">
-            <div v-for="(item, index) in noteItems" :key="index">
-                <div v-if="editNote === index" class="notesContent">
-                    <input type="text" v-model="item.title">
-                    <textarea v-model="item.text"></textarea>
+            <div v-for="(item, index) in searchResult" :key="index">
+                <div v-if="editNote === item" class="notesContent">
+                    <input type="text" v-model="editedTitle">
+                    <textarea v-model="editedText"></textarea>
                     <button @click="saveNote" class="saveNote">Save</button>
+                    <button @click="deleteNote" class="deleteNote">Delete</button>
                 </div>
-                <div v-else @click="editNote = index" class="notesContent">
+                <div v-else @click="editNoteIndex(index)" class="notesContent">
                     <h3>{{ item.title }}</h3>
                     <p>{{ item.text }}</p>
                 </div>
@@ -26,37 +37,85 @@
 export default {
     data() {
         return {
+            searchQuery: '',
+            sortOrder: 'asc',
             editNote: null,
+            editedTitle: '',
+            editedText: '',
             newNote: false,
             newNoteTitle: '',
             newNoteText: '',
             noteItems: [],
         }
     },
+    created() {
+        if (localStorage.getItem('noteItems')) {
+            this.noteItems = JSON.parse(localStorage.getItem('noteItems'));
+        }
+    },
     methods: {
         showNotes () {
-            this.newNote = true
+            this.newNote = !this.newNote
+            this.editNote = null
         },
         addNote () {
+            this.editNote = null
             if (this.newNoteTitle && this.newNoteText) {
                 if (this.editNote !== null) {
-                    this.noteItems[this.editNote].title = this.newNoteTitle;
-                    this.noteItems[this.editNote].text = this.newNoteText;
+                    this.noteItems[this.editNote].title = this.newNoteTitle
+                    this.noteItems[this.editNote].text = this.newNoteText
                 } else {
                     this.noteItems.push({
                         title: this.newNoteTitle,
                         text: this.newNoteText
-                });
+                })
+                localStorage.setItem('noteItems', JSON.stringify(this.noteItems))
                 }
-                this.newNote = false;
-                this.newNoteTitle = '';
-                this.newNoteText = '';
-                this.editNote = null;
+                this.newNote = false
+                this.newNoteTitle = ''
+                this.newNoteText = ''
+                this.editNote = null
             }
         },
-        saveNote() {
-            this.editNote = null
+        editNoteIndex(index) {
+            this.editNote = this.searchResult[index]
+            let originalIndex = this.noteItems.indexOf(this.editNote)
+            this.editedTitle = this.noteItems[originalIndex].title
+            this.editedText = this.noteItems[originalIndex].text
         },
+        saveNote() {
+            if(this.editNote !== null) {
+                let originalIndex = this.noteItems.indexOf(this.editNote)
+                this.noteItems[originalIndex].title = this.editedTitle
+                this.noteItems[originalIndex].text = this.editedText
+                localStorage.setItem('noteItems', JSON.stringify(this.noteItems))
+            }
+            this.editNote = null
+            this.editedTitle = ''
+            this.editedText = ''
+        },
+        deleteNote(index) {
+            this.noteItems.splice(index, 1)
+        },
+    },
+    computed: {
+        searchResult() {
+            let sortedNotes = [...this.noteItems]
+            if (this.searchQuery) {
+                this.editNote = null
+                sortedNotes = sortedNotes.filter(item =>
+                    item.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+                )
+            }
+            if (this.sortOrder === 'asc') {
+                this.editNote = null
+                sortedNotes.sort((a, b) => a.title.localeCompare(b.title))
+            } else if (this.sortOrder === 'desc') {
+                this.editNote = null
+                sortedNotes.sort((a, b) => b.title.localeCompare(a.title))
+            }
+            return sortedNotes
+        }
     },
 }
 </script>
@@ -64,18 +123,31 @@ export default {
     .title {
         margin: 10px 0 10px;
     }
-    .newNote, .addNote, .saveNote {
+    .newNote, .addNote, .saveNote, .closeNote, .deleteNote {
         font-size: 17px;
         padding: 10px;
     }
     .newNote {
+        margin-bottom: 10px;
+        width: 700px;
+    }
+    .newNoteInput {
         margin-bottom: 20px;
+        width: 700px;
+        margin: auto;
     }
     .addNote {
         margin-top: 20px;
     }
-    .saveNote {
+    .saveNote, .deleteNote {
         margin-top: 10px;
+    }
+    .deleteNote {
+        color: #5e0101;
+        background-color: #ff5555;
+    }
+    .notes {
+        margin-top: 20px;
     }
     .notes h3, .notes p, .notes input, .notes textarea {
         background-color: rgba(47, 79, 79, 0.288);
@@ -83,7 +155,7 @@ export default {
         border-radius: 7px;
         margin: 0;
         text-align: left;
-        width: 400px;
+        width: 650px;
         padding: 10px;
         word-wrap: break-word;
     }
@@ -93,12 +165,24 @@ export default {
     .notes li, .notesContent {
         display: flex;
         align-items: center;
-        flex-direction: column;
+        justify-content: center;
+        flex-direction: row;
         flex-wrap: wrap;
-        width: 450px;
+        width: 700px;
         padding: 15px 0 15px;
         margin: 10px auto 10px auto;
         background-color: rgba(47, 79, 79, 0.15);
         border-radius: 7px;
+    }
+    .search {
+        display: flex;
+        margin: 0 auto 10px auto;
+        width: 700px;
+    }
+    .search input {
+        margin-right: 10px;
+    }
+    .search select {
+        width: 20%;
     }
 </style>
