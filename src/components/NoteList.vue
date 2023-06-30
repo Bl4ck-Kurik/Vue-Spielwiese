@@ -1,4 +1,4 @@
-<template lang="">
+<template>
     <div>
         <h2 style="margin-top: 30px;">Take Notes</h2>
         <button class="newNote" @click="showNotes">New Note</button>
@@ -20,10 +20,17 @@
         <div class="notes">
             <div v-for="(item, index) in searchResult" :key="index">
                 <div v-if="editNote === item" class="notesContent">
-                    <input type="text" v-model="editedTitle">
-                    <textarea v-model="editedText"></textarea>
-                    <button @click="saveNote" class="saveNote">Save</button>
-                    <button @click="deleteNote" class="deleteNote">Delete</button>
+                    <div>
+                        <input type="text" v-model="editedTitle">
+                        <textarea v-model="editedText"></textarea>
+                    </div>
+                    <div class="noteButtons">
+                        <div>
+                            <button @click="saveNote" class="saveNote">Save</button>
+                            <button @click="this.editNote = null" class="closeNote">Close</button>
+                        </div>    
+                        <button @click="deleteNote" class="deleteNote">Delete</button>
+                    </div>
                 </div>
                 <div v-else @click="editNoteIndex(index)" class="notesContent">
                     <h3>{{ item.title }}</h3>
@@ -94,8 +101,15 @@ export default {
             this.editedTitle = ''
             this.editedText = ''
         },
-        deleteNote(index) {
-            this.noteItems.splice(index, 1)
+        deleteNote() {
+            if(this.editNote !== null) {
+                let originalIndex = this.noteItems.indexOf(this.editNote);
+                this.noteItems.splice(originalIndex, 1);
+                localStorage.setItem('noteItems', JSON.stringify(this.noteItems));
+            }
+            this.editNote = null;
+            this.editedTitle = '';
+            this.editedText = '';
         },
     },
     computed: {
@@ -123,7 +137,7 @@ export default {
     .title {
         margin: 10px 0 10px;
     }
-    .newNote, .addNote, .saveNote, .closeNote, .deleteNote {
+    .newNote, .addNote, .saveNote, .closeNote, .deleteNote, .closeNote {
         font-size: 17px;
         padding: 10px;
     }
@@ -139,12 +153,20 @@ export default {
     .addNote {
         margin-top: 20px;
     }
-    .saveNote, .deleteNote {
+    .saveNote, .closeNote, .deleteNote {
         margin-top: 10px;
+    }
+    .saveNote, .closeNote {
+        align-items: start;
+        justify-content: lefts;
     }
     .deleteNote {
         color: #5e0101;
         background-color: #ff5555;
+    }
+    .saveNote, .addNote {
+        color: rgb(1, 54, 1);
+        background-color: rgb(125, 223, 125);
     }
     .notes {
         margin-top: 20px;
@@ -155,9 +177,14 @@ export default {
         border-radius: 7px;
         margin: 0;
         text-align: left;
-        width: 650px;
         padding: 10px;
         word-wrap: break-word;
+    }
+    .notes input, .notes textarea {
+        width: 670px;
+    }
+    .notes p, .notes h3 {
+        width: 648px;
     }
     .notes h3, .notes input {
         margin-bottom: 5px;
@@ -173,6 +200,11 @@ export default {
         margin: 10px auto 10px auto;
         background-color: rgba(47, 79, 79, 0.15);
         border-radius: 7px;
+    }
+    .noteButtons {
+        display: flex;
+        justify-content: space-between;
+        width: 670px;
     }
     .search {
         display: flex;
