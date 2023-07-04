@@ -1,7 +1,10 @@
 <template>
-<div v-if="showModal">
-    <Modal theme="sale" @close="toggleModal">
-      <template v-slot:links>
+  <div v-if="showModal">
+    <Modal
+      theme="sale"
+      @close="toggleModal"
+    >
+      <template #links>
         <a href="#">sign up now</a>
         <a href="#">more info</a>
       </template>
@@ -9,11 +12,16 @@
       <p>Get your Skull Trooper here (swag)!</p>
     </Modal>
   </div>
-  <button @click.shift="toggleModal">open modal (shift)</button>
+  <button @click.shift="toggleModal">
+    open modal (shift)
+  </button>
 
   <div v-if="showModalTwo">
-    <Modal theme="sale" @close="toggleModalTwo">
-      <template v-slot:links>
+    <Modal
+      theme="sale"
+      @close="toggleModalTwo"
+    >
+      <template #links>
         <a href="#">sign up now</a>
         <a href="#">more info</a>
       </template>
@@ -21,12 +29,17 @@
       <p>Get your Skull Trooper here (swag)!</p>
     </Modal>
   </div>
-  <button @click.alt="toggleModalTwo">open modal (alt)</button>
+  <button @click.alt="toggleModalTwo">
+    open modal (alt)
+  </button>
 </template>
 <script>
 import Modal from '@/components/Modal.vue'
 
 export default {
+  components: {
+    Modal,
+  },
   data() {
     return {
       header: 'Sign Up for free V-Bucks',
@@ -42,9 +55,6 @@ export default {
     toggleModalTwo () {
       this.showModalTwo = !this.showModalTwo
     },
-  },
-  components: {
-    Modal,
   },
 }
 </script>
