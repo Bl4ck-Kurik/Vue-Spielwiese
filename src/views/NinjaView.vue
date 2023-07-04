@@ -1,26 +1,9 @@
 <template>
-  <h2 style="margin-top: 50px;">
-    Ninja React Timer
-  </h2>
-  <button
-    class="large-button"
-    :disabled="isPlaying"
-    @click="start"
-  >
-    play
-  </button>
-  <Block
-    v-if="isPlaying"
-    :delay="delay"
-    @end="endGame"
-  />
-  <Results
-    v-if="showResults"
-    :score="score"
-  />
-  <p v-if="showResults">
-    Reaction time: {{ score }}ms
-  </p>
+<h2 style="margin-top: 50px;">Ninja React Timer</h2>
+  <button class="large-button" @click="start" :disabled="isPlaying">play</button>
+  <Block v-if="isPlaying" :delay="delay" @end="endGame"/>
+  <Results :score="score" v-if="showResults"/>
+  <p v-if="showResults">Reaction time: {{ score }}ms</p>
 </template>
 
 <script>
@@ -30,10 +13,6 @@ import Results from '@/components/Results.vue'
 
 export default {
   name: 'HomeView',
-  components: {
-    Block,
-    Results,
-  },
   data() {
     return {
       isPlaying: false,
@@ -53,6 +32,10 @@ export default {
       this.isPlaying = false
       this.showResults = true
     },
+  },
+  components: {
+    Block,
+    Results,
   }
 }
 </script>

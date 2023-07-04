@@ -1,10 +1,7 @@
 <template>
-  <div>
-    <h2
-      class="result"
-      v-html="scoreMsg"
-    />
-  </div>
+    <div>
+        <h2 class="result" v-html="scoreMsg"></h2>
+    </div>
 </template>
 <script>
 export default {

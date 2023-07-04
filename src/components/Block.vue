@@ -1,6 +1,7 @@
 <template>
     <div class="block" v-if="showBlock" @click="stopTimer">click me</div>
     <div class="block-red" v-if="!showBlock" @click="stopTimer">click when green!</div>
+<<<<<<< HEAD
   <div
     v-if="showBlock"
     class="block"
@@ -16,6 +17,8 @@
     click when green!
   </div>
 
+=======
+>>>>>>> parent of eb26cb3 (clean up)
 </template>
 <script>
 export default {

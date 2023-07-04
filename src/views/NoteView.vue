@@ -1,6 +1,6 @@
 <template>
-  <NoteList />
-</template>
+    <NoteList/>
+    </template>
     <script>
     import NoteList from '@/components/NoteList.vue'
     

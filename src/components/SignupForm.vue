@@ -1,66 +1,38 @@
 <template>
-  <form @submit.prevent="handleSubmit">
-    <label>Email:</label>
-    <input
-      v-model="email"
-      type="email"
-      required
-    >
+    <form @submit.prevent="handleSubmit">
+        <label>Email:</label>
+        <input type="email" required v-model="email">
 
-    <label>Password:</label>
-    <input
-      v-model="password"
-      type="password"
-      required
-    >
-    <div
-      v-if="passwordError"
-      class="error"
-    >
-      {{ passwordError }}
-    </div>
+        <label>Password:</label>
+        <input type="password" required v-model="password">
+        <div v-if="passwordError" class="error">{{ passwordError }}</div>
 
-    <label>Role:</label>
-    <select v-model="role">
-      <option value="developer">
-        Web Developer
-      </option>
-      <option value="designer">
-        Web Designer
-      </option>
-    </select>
+        <label>Role:</label>
+        <select v-model="role">
+            <option value="developer">Web Developer</option>
+            <option value="designer">Web Designer</option>
+        </select>
 
-    <label>Skills:</label>
-    <input
-      v-model="tempSkill"
-      type="text"
-      @keyup="addSkill"
-    >
-    <div
-      v-for="skill in skills"
-      :key="skill"
-      class="pill"
-    >
-      <span @click="removeSkill(skill)">{{ skill }}</span>
-    </div>
+        <label>Skills:</label>
+        <input type="text" v-model="tempSkill" @keyup="addSkill">
+        <div v-for="skill in skills" :key="skill" class="pill">
+            <span @click="removeSkill(skill)">{{ skill }}</span>
+        </div>
 
-    <div class="terms">
-      <input
-        v-model="terms"
-        type="checkbox"
-        required
-      >
-      <label>Accept terms and conditions</label>
-    </div>
+        <div class="terms">
+            <input type="checkbox" v-model="terms" required>
+            <label>Accept terms and conditions</label>
+        </div>
 
-    <div class="submit">
-      <button>Create an Account</button>
-    </div>
-  </form>
-  <p>Email: {{ email }}</p>
-  <p>Password: {{ password }}</p>
-  <p>Role: {{ role }}</p>
-  <p>Terms: {{ terms }}</p>
+        <div class="submit">
+            <button>Create an Account</button>
+        </div>
+
+    </form>
+    <p>Email: {{ email }}</p>
+    <p>Password: {{ password }}</p>
+    <p>Role: {{ role }}</p>
+    <p>Terms: {{ terms }}</p>
 </template>
 <script>
 export default {

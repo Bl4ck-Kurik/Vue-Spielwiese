@@ -1,111 +1,44 @@
 <template>
-  <div>
-    <h2 style="margin-top: 30px;">
-      Take Notes
-    </h2>
-    <button
-      class="newNote"
-      @click="showNotes"
-    >
-      New Note
-    </button>
-    <div class="search">
-      <input
-        v-model="searchQuery"
-        type="text"
-        placeholder="Search"
-      >
-      <select v-model="sortOrder">
-        <option value="asc">
-          Ascending
-        </option>
-        <option value="desc">
-          Descending
-        </option>
-      </select>
-    </div>
-    <div
-      v-if="newNote"
-      class="newNoteInput"
-    >
-      <input
-        v-model="newNoteTitle"
-        class="title"
-        type="text"
-        placeholder="Title"
-      >
-      <textarea
-        v-model="newNoteText"
-        cols="30"
-        rows="10"
-        class="content"
-        placeholder="Content"
-      />
-      <div class="editButtons">
-        <button
-          class="addNote"
-          @click="addNote"
-        >
-          Add Note
-        </button>
-        <button
-          class="closeNote"
-          @click="showNotes"
-        >
-          Close
-        </button>
-      </div>
-    </div>
-    <div class="notes">
-      <div
-        v-for="(item, index) in searchResult"
-        :key="index"
-      >
-        <div
-          v-if="editNote === item"
-          class="notesContent"
-        >
-          <div>
-            <input
-              v-model="editedTitle"
-              type="text"
-            >
-            <textarea v-model="editedText" />
-          </div>
-          <div class="noteButtons">
-            <div>
-              <button
-                class="saveNote"
-                @click="saveNote"
-              >
-                Save
-              </button>
-              <button
-                class="closeNote"
-                @click="editNote = null"
-              >
-                Close
-              </button>
-            </div>    
-            <button
-              class="deleteNote"
-              @click="deleteNote"
-            >
-              Delete
-            </button>
-          </div>
+    <div>
+        <h2 style="margin-top: 30px;">Take Notes</h2>
+        <button class="newNote" @click="showNotes">New Note</button>
+        <div class="search">
+            <input type="text" v-model="searchQuery" placeholder="Search">
+            <select v-model="sortOrder">
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+            </select>
         </div>
-        <div
-          v-else
-          class="notesContent"
-          @click="editNoteIndex(index)"
-        >
-          <h3>{{ item.title }}</h3>
-          <p>{{ item.text }}</p>
+        <div v-if="newNote" class="newNoteInput">
+            <input class="title" type="text" placeholder="Title" v-model="newNoteTitle">
+            <textarea cols="30" rows="10" class="content" placeholder="Content" v-model="newNoteText"></textarea>
+            <div class="editButtons">
+                <button class="addNote" @click="addNote">Add Note</button>
+                <button class="closeNote" @click="showNotes">Close</button>
+            </div>
         </div>
-      </div>
+        <div class="notes">
+            <div v-for="(item, index) in searchResult" :key="index">
+                <div v-if="editNote === item" class="notesContent">
+                    <div>
+                        <input type="text" v-model="editedTitle">
+                        <textarea v-model="editedText"></textarea>
+                    </div>
+                    <div class="noteButtons">
+                        <div>
+                            <button @click="saveNote" class="saveNote">Save</button>
+                            <button @click="this.editNote = null" class="closeNote">Close</button>
+                        </div>    
+                        <button @click="deleteNote" class="deleteNote">Delete</button>
+                    </div>
+                </div>
+                <div v-else @click="editNoteIndex(index)" class="notesContent">
+                    <h3>{{ item.title }}</h3>
+                    <p>{{ item.text }}</p>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </template>
 <script>
 export default {
@@ -120,25 +53,6 @@ export default {
             newNoteTitle: '',
             newNoteText: '',
             noteItems: [],
-        }
-    },
-    computed: {
-        searchResult() {
-            let sortedNotes = [...this.noteItems]
-            if (this.searchQuery) {
-                this.editNote = null
-                sortedNotes = sortedNotes.filter(item =>
-                    item.title.toLowerCase().includes(this.searchQuery.toLowerCase())
-                )
-            }
-            if (this.sortOrder === 'asc') {
-                this.editNote = null
-                sortedNotes.sort((a, b) => a.title.localeCompare(b.title))
-            } else if (this.sortOrder === 'desc') {
-                this.editNote = null
-                sortedNotes.sort((a, b) => b.title.localeCompare(a.title))
-            }
-            return sortedNotes
         }
     },
     created() {
@@ -197,6 +111,25 @@ export default {
             this.editedTitle = '';
             this.editedText = '';
         },
+    },
+    computed: {
+        searchResult() {
+            let sortedNotes = [...this.noteItems]
+            if (this.searchQuery) {
+                this.editNote = null
+                sortedNotes = sortedNotes.filter(item =>
+                    item.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+                )
+            }
+            if (this.sortOrder === 'asc') {
+                this.editNote = null
+                sortedNotes.sort((a, b) => a.title.localeCompare(b.title))
+            } else if (this.sortOrder === 'desc') {
+                this.editNote = null
+                sortedNotes.sort((a, b) => b.title.localeCompare(a.title))
+            }
+            return sortedNotes
+        }
     },
 }
 </script>
