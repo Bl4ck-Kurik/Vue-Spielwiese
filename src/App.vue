@@ -4,11 +4,22 @@
   <div id="router-view">
     <router-view/>
   </div>
+  <Accordion>
+    <template v-slot:head>
+      <h2 style="color: white;">cooles accordion und so ja</h2>
+    </template>
+    <template v-slot:title>
+      <h1>Header</h1>
+    </template>
+    <template v-slot:content>
+      <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+    </template>
+  </Accordion>
 </template>
 
 <script>
-
 import FlexNav from '@/components/FlexNav.vue'
+import Accordion from '@/components/Accordion.vue'
 
 export default {
   name: 'App',
@@ -16,6 +27,10 @@ export default {
     return {
       title: 'My First Vue APP',
       navItems: [
+        {
+          label: "Home",
+          link: "/",
+        },
         {
           label: "Notes",
           link: "/notes",
@@ -54,6 +69,7 @@ export default {
   },
   components: {
     FlexNav,
+    Accordion,
   }
 }
 </script>
