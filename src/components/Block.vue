@@ -1,6 +1,6 @@
 <template>
-    <div class="block" v-if="showBlock" @click="stopTimer">click me</div>
-    <div class="block-red" v-if="!showBlock" @click="stopTimer">click when green!</div>
+    <div class="block" v-if="showBlock" @click="stopTimer">Click me</div>
+    <div class="block-red" v-if="!showBlock" @click="stopTimer">Click when green!</div>
 </template>
 <script>
 export default {
