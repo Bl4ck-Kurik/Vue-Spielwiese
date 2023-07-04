@@ -1,17 +1,35 @@
 <template>
-    <div class="nav">
-      <div v-for="(item, index) in items" :key="index" class="nav-item" @mouseenter="showSub(index)" @mouseleave="hideSub(index)">
-        <div class="nav-link" @click="gotoLink(item.link)">
-          <h3>{{ item.label }}</h3>
-        </div>
-        <transition name="slide-fade">
-          <div class="sub" v-show="item.showSub">
-            <p v-for="(subItem, subIndex) in item.subItems" :key="subIndex" @click="gotoLink(subItem.link)">{{ subItem.label }}</p>
-          </div>
-        </transition>
+  <div class="nav">
+    <div
+      v-for="(item, index) in items"
+      :key="index"
+      class="nav-item"
+      @mouseenter="showSub(index)"
+      @mouseleave="hideSub(index)"
+    >
+      <div
+        class="nav-link"
+        @click="gotoLink(item.link)"
+      >
+        <h3>{{ item.label }}</h3>
       </div>
+      <transition name="slide-fade">
+        <div
+          v-show="item.showSub"
+          class="sub"
+        >
+          <p
+            v-for="(subItem, subIndex) in item.subItems"
+            :key="subIndex"
+            @click="gotoLink(subItem.link)"
+          >
+            {{ subItem.label }}
+          </p>
+        </div>
+      </transition>
     </div>
-  </template>
+  </div>
+</template>
   
   <script>
   export default {

@@ -1,17 +1,34 @@
 <template lang="">
-    <div>
-        <ul>
-            <li v-for="(item, index) in todoItems" :key="index">
-                <input type="checkbox" v-model="item.completed">
-                <span :class="{ 'completed': item.completed }">{{ item.text }}</span>
-                <button @click="deleteItem(index)">Delete</button>
-            </li>
-        </ul>
+  <div>
+    <ul>
+      <li
+        v-for="(item, index) in todoItems"
+        :key="index"
+      >
+        <input
+          v-model="item.completed"
+          type="checkbox"
+        >
+        <span :class="{ 'completed': item.completed }">{{ item.text }}</span>
+        <button @click="deleteItem(index)">
+          Delete
+        </button>
+      </li>
+    </ul>
     <div class="newItem">
-        <input class="newItemText" type="text" v-model="newItemText">
-        <button class="addItem" @click="addItem">Add</button>
+      <input
+        v-model="newItemText"
+        class="newItemText"
+        type="text"
+      >
+      <button
+        class="addItem"
+        @click="addItem"
+      >
+        Add
+      </button>
     </div>
-    </div>
+  </div>
 </template>
 <script>
 export default {

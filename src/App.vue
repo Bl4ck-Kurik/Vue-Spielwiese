@@ -2,7 +2,7 @@
   <h1>{{ title }}</h1>
   <FlexNav :items="navItems" />
   <div id="router-view">
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
@@ -12,6 +12,9 @@ import FlexNav from '@/components/FlexNav.vue'
 
 export default {
   name: 'App',
+  components: {
+    FlexNav,
+  },
   data () {
     return {
       title: 'My First Vue APP',
@@ -51,9 +54,6 @@ export default {
   },
   methods: {
     
-  },
-  components: {
-    FlexNav,
   }
 }
 </script>
