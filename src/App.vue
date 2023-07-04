@@ -1,12 +1,14 @@
 <template>
   <h1>{{ title }}</h1>
   <FlexNav :items="navItems" />
-  <router-view/>
+  <div id="router-view">
+    <router-view/>
+  </div>
 </template>
 
 <script>
 
-import FlexNav from './components/FlexNav.vue'
+import FlexNav from '@/components/FlexNav.vue'
 
 export default {
   name: 'App',
