@@ -57,7 +57,7 @@ export default {
     },
     created() {
         if (localStorage.getItem('noteItems')) {
-            this.noteItems = JSON.parse(localStorage.getItem('noteItems'));
+            this.noteItems = JSON.parse(localStorage.getItem('noteItems'))
         }
     },
     methods: {
@@ -103,13 +103,13 @@ export default {
         },
         deleteNote() {
             if(this.editNote !== null) {
-                let originalIndex = this.noteItems.indexOf(this.editNote);
-                this.noteItems.splice(originalIndex, 1);
-                localStorage.setItem('noteItems', JSON.stringify(this.noteItems));
+                let originalIndex = this.noteItems.indexOf(this.editNote)
+                this.noteItems.splice(originalIndex, 1)
+                localStorage.setItem('noteItems', JSON.stringify(this.noteItems))
             }
-            this.editNote = null;
-            this.editedTitle = '';
-            this.editedText = '';
+            this.editNote = null
+            this.editedTitle = ''
+            this.editedText = ''
         },
     },
     computed: {

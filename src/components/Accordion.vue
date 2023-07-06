@@ -26,7 +26,6 @@ export default {
     methods: {
         showAccordion() {
             this.show = !this.show
-            console.log('test')
         }
     },
 }
@@ -45,17 +44,19 @@ export default {
         margin: auto;
         border-radius: 7px;
     }
+    .wrapper {
+        padding: 0;
+        margin-top: -10px;
+    }
     .head {
         display: flex;
         justify-content: space-between;
         align-items: center;
     }
-
     .title {
         background-color: rgba(0, 0, 0, 0.2);
         border-radius: 7px;
         padding: 2px;
-        margin-bottom: 12px;
     }
     .content {
         background-color: rgba(0, 0, 0, 0.2);

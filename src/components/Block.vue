@@ -1,12 +1,7 @@
 <template>
-    <div class="block" v-if="showBlock" @click="stopTimer">click me</div>
-    <div class="block-red" v-if="!showBlock" @click="stopTimer">click when green!</div>
-  <div v-if="showBlock" class="block" @click="stopTimer">
-    click me
-  </div>
-  <div v-if="!showBlock" class="block-red" @click="stopTimer">
-    click when green!
-  </div>
+    <div class="block" v-if="showBlock && !gameOver" @click="stopTimer">click me</div>
+    <div class="block-red" v-else-if="!showBlock && !gameOver" @click="endGameEarly">click when green!</div>
+    <div class="block-yellow" v-if="gameOver" @click="resetGame">You clicked too soon, click to restart!</div>
 </template>
 <script>
 export default {
@@ -15,14 +10,14 @@ export default {
         return {
             showBlock: false,
             timer: null,
-            reactionTime: 0
+            reactionTime: 0,
+            gameCount: 0,
+            gameOver: false,
+            gameStart: null,
         }
     },
     mounted() {
-        setTimeout(() => {
-            this.showBlock = true
-            this.startTimer()
-        },  this.delay)
+        this.startGame();
     },
     methods: {
         startTimer () {
@@ -31,8 +26,36 @@ export default {
             }, 10)
         },
         stopTimer () {
+            if (this.gameOver) {
+                return
+            }
             clearInterval(this.timer)
             this.$emit('end', this.reactionTime)
+            this.reactionTime = 0
+            this.showBlock = false
+            this.gameCount++
+            if (this.gameCount < 2 && !this.gameOver) {
+                this.gameStart = setTimeout(() => this.startGame(), 1000)
+            }
+        },
+        startGame() {
+            this.gameStart = setTimeout(() => {
+                this.showBlock = true
+                this.startTimer()
+            },  this.delay)
+        },
+        endGameEarly() {
+            this.gameOver = true
+            clearInterval(this.timer)
+            clearTimeout(this.gameStart)
+        },
+        resetGame() {
+            this.gameOver = false
+            this.gameCount = 0
+            this.showBlock = false
+            clearTimeout(this.gameStart)
+            clearInterval(this.timer)
+            this.startGame()
         },
     },
 }
@@ -57,5 +80,15 @@ export default {
         padding: 100px 0;
         margin: 40px auto;
         cursor: wait;
+    }
+    .block-yellow {
+        width: 400px;
+        border-radius: 20px;
+        background: rgb(255, 255, 164);
+        color: rgb(117, 117, 0);
+        text-align: center;
+        padding: 100px 0;
+        margin: 40px auto;
+        cursor: pointer;
     }
 </style>
