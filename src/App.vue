@@ -1,10 +1,11 @@
 <template>
   <h1>{{ title }}</h1>
   <FlexNav :items="navItems" />
+  <!-- <Api/> -->
   <div id="router-view">
     <router-view/>
   </div>
-  <Accordion>
+  <!-- <Accordion>
     <template v-slot:head>
       <h2 style="color: white;">cooles accordion und so ja</h2>
     </template>
@@ -14,12 +15,13 @@
     <template v-slot:content>
       <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
     </template>
-  </Accordion>
+  </Accordion> -->
 </template>
 
 <script>
 import FlexNav from '@/components/FlexNav.vue'
 import Accordion from '@/components/Accordion.vue'
+import Api from '@/components/Api.vue'
 
 export default {
   name: 'App',
@@ -70,6 +72,7 @@ export default {
   components: {
     FlexNav,
     Accordion,
+    Api,
   }
 }
 </script>

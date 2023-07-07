@@ -41,7 +41,7 @@ export default {
         min-height: 20px;
         width: 700px;
         padding: 12px 12px;
-        margin: auto;
+        margin: 50px auto;
         border-radius: 7px;
     }
     .wrapper {
