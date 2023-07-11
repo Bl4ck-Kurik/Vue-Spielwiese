@@ -22,7 +22,7 @@
                 <div v-if="editNote === item" class="notesContent">
                     <div>
                         <input type="text" v-model="editedTitle">
-                        <textarea v-model="editedText"></textarea>
+                        <textarea class="newContent" v-model="editedText"></textarea>
                     </div>
                     <div class="noteButtons">
                         <div>
@@ -149,6 +149,9 @@ export default {
         margin-bottom: 20px;
         width: 700px;
         margin: auto;
+    }
+    .newContent {
+        background: darkslategray;
     }
     .addNote {
         margin-top: 20px;

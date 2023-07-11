@@ -59,13 +59,13 @@ form {
     border-radius: 10px;
 }
 label {
-    color: #fff;
+    color: #ffffffb4;
     display: inline-block;
     margin: 25px 0 15px;
     font-size: 0.6em;
-    text-transform: uppercase;
     letter-spacing: 1px;
     font-weight: bold;
+    text-transform: uppercase;
 }
 input, select {
     display: block;

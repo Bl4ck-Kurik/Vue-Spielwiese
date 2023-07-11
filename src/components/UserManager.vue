@@ -1,49 +1,63 @@
 <template>
     <div>
-        <h2 style="margin-top: 30px;">User Manager</h2>
-        <button class="newUser" @click="showUsers">New User</button>
-        <div class="search">
-            <input type="text" v-model="searchQuery" placeholder="Search">
-            <select v-model="sortOrder">
-                <option value="asc">Ascending</option>
-                <option value="desc">Descending</option>
-            </select>
+      <h2 style="margin-top: 30px;">User Manager</h2>
+      <button class="newUser" @click="showUsers">New User</button>
+      <div class="search">
+        <input type="text" v-model="searchQuery" placeholder="Search">
+        <select v-model="sortOrder">
+          <option value="asc">Ascending</option>
+          <option value="desc">Descending</option>
+        </select>
+      </div>
+      <div class="newUserInput" v-if="showNewUser">
+        <input class="title" type="text" placeholder="First Name" v-model="newUser.firstName">
+        <input class="title" type="text" placeholder="Name" v-model="newUser.lastName">
+        <input class="title" type="email" placeholder="E-Mail" v-model="newUser.email">
+        <input class="title" type="password" placeholder="Password" v-model="newUser.pwd">
+        <div class="editButtons">
+          <button class="addUser" @click="addUser">Add User</button>
+          <button class="closeUser" @click="showUsers">Close</button>
         </div>
-        <div v-if="newUser" class="newUserInput">
-            <input class="title" type="text" placeholder="First Name" v-model="newUserFirstName">
-            <input class="title" type="text" placeholder="Name" v-model="newUserLastName">
-            <input class="title" type="email" placeholder="E-Mail" v-model="newUserEmail">
-            <input class="title" type="password" placeholder="Password" v-model="newUserPassword">
-            <div class="editButtons">
-                <button class="addUser" @click="addUser">Add User</button>
-                <button class="closeUser" @click="showUsers">Close</button>
-            </div>
-        </div>
-        <div class="user">
-            <div v-for="(item, index) in searchResult" :key="index">
-                <div v-if="editUser === item" class="userContent">
-                    <div>
-                        <input type="text" v-model="editedFirstName">
-                        <input type="text" v-model="editedLastName">
-                        <input type="email" v-model="editedEmail">
-                        <input type="text" v-model="editedPassword">
+      </div>
+      <div class="user">
+        <div v-for="(item, index) in searchResult" :key="index">
+          <div v-if="editUser === item" class="userContent">
+            <div>
+                <div>
+                    <div class="inputField">
+                        <input type="text" id="firstName" v-model="editedUser.firstName">
+                        <label for="firstName">First Name</label>
                     </div>
-                    <div class="userButtons">
-                        <div>
-                            <button @click="saveUser" class="saveUser">Save</button>
-                            <button @click="this.editUser = null" class="closeUser">Close</button>
-                        </div>    
-                        <button @click="deleteUser" class="deleteUser">Delete</button>
+                    <div class="inputField">
+                        <input type="text" id="lastName" v-model="editedUser.lastName">
+                        <label for="lastName">Last Name</label>
+                    </div>
+                    <div class="inputField">
+                        <input type="email" id="email" v-model="editedUser.email">
+                        <label for="email">Email</label>
+                    </div>
+                    <div class="inputField">
+                        <input type="text" id="pwd" v-model="editedUser.pwd">
+                        <label for="pwd">Password</label>
                     </div>
                 </div>
-                <div v-else @click="editUserIndex(index)" class="userContent">
-                    <h3>{{ item.firstName }} {{ item.lastName }}</h3>
-                    <p>{{ item.email }}</p>
-                </div>
             </div>
+            <div class="userButtons">
+              <div>
+                <button @click="saveUser" class="saveUser">Save</button>
+                <button @click="this.editUser = null" class="closeUser">Close</button>
+              </div>
+              <button @click="deleteUser" class="deleteUser">Delete</button>
+            </div>
+          </div>
+          <div v-else @click="editUserIndex(index)" class="userContent">
+            <h3>{{ item.firstName }} {{ item.lastName }}</h3>
+            <p>{{ item.email }}</p>
+          </div>
         </div>
+      </div>
     </div>
-</template>
+  </template>
 <script>
 import axios from 'axios'
 
@@ -52,17 +66,21 @@ export default {
         return {
             searchQuery: '',
             sortOrder: 'asc',
-            editUser: null,
-            editedFirstName: '',
-            editedLastName: '',
-            editedEmail: '',
-            editedPassword: '',
-            newUser: false,
-            newUserFirstName: '',
-            newUserLastName: '',
-            newUserEmail: '',
-            newUserPassword: '',
+            showNewUser: false,
+            editedUser: {
+                firstName: '',
+                lastName: '',
+                email: '',
+                pwd: '',
+            },
+            newUser: {
+                firstName: '',
+                lastName: '',
+                email: '',
+                pwd: '',
+            },
             userItems: [],
+            editUser: null,
         }
     },
     created() {
@@ -72,86 +90,96 @@ export default {
         async getUsers() {
             try {
                 const response = await axios.get('http://localhost:10000/get-user')
-                console.log(response.data) // Log the response data
-                if (Array.isArray(response.data)) {
-                    this.userItems = response.data
+                console.log(response.data)
+                if (typeof response.data === 'object' && response.data !== null) {
+                    this.userItems = Object.keys(response.data).map(key => ({
+                        id: key,
+                        ...response.data[key],
+                    }))
                 } else {
-                    console.error('Response data is not an array')
+                    console.error('Response data is not an object')
                 }
             } catch (error) {
                 console.error(error)
             }
         },
-        showUsers () {
-            this.newUser = !this.newUser
+        showUsers() {
+            this.newUser = {
+                firstName: '',
+                lastName: '',
+                email: '',
+                pwd: '',
+            }
             this.editUser = null
+            this.showNewUser = !this.showNewUser
         },
         async addUser () {
             this.editUser = null
-            if (this.newUserFirstName && this.newUserLastName) {
+            if (this.newUser.firstName && this.newUser.lastName) {
                 try {
-                    await axios.post('http://localhost:10000/add-user', {
-                        firstName: this.newUserFirstName,
-                        lastName: this.newUserLastName,
-                        email: this.newUserEmail,
-                        pwd: this.newUserPassword,
-                    })
+                    await axios.post('http://localhost:10000/add-user', this.newUser)
                     this.getUsers()
                 } catch (error) {
                     console.error(error)
                 }
-                this.newUser = false
-                this.newUserFirstName = ''
-                this.newUserLastName = ''
-                this.newUserEmail = ''
-                this.newUserPassword = ''
+                this.newUser = {
+                    firstName: '',
+                    lastName: '',
+                    email: '',
+                    pwd: '',
+                }
                 this.editUser = null
+                this.showNewUser = false
             }
         },
         editUserIndex(index) {
             this.editUser = this.searchResult[index]
-            let originalIndex = this.userItems.indexOf(this.editUser)
-            this.editedFirstName = this.userItems[originalIndex].firstName
-            this.editedLastName = this.userItems[originalIndex].lastName
-            this.editedEmail = this.userItems[originalIndex].email
-            this.editedPassword = this.userItems[originalIndex].pwd
+            this.editedUser = {
+                id: this.editUser.id,
+                firstName: this.editUser.firstName,
+                lastName: this.editUser.lastName,
+                email: this.editUser.email,
+                pwd: this.editUser.pwd,
+            }
         },
         async saveUser() {
             if(this.editUser !== null) {
-                let originalIndex = this.userItems.indexOf(this.editUser)
                 try {
-                    await axios.put(`http://localhost:10000/update-user/${originalIndex}`, {
-                        firstName: this.editedFirstName,
-                        lastName: this.editedLastName,
-                        email: this.editedEmail,
-                        pwd: this.editedPassword,
-                    })
-                    this.getUsers()
+                    console.log("Sending request");
+                    const response = await axios.post(`http://localhost:10000/update-user/${this.editedUser.id}`, this.editedUser);
+                    console.log("Received response", response);
+                    this.getUsers();
                 } catch (error) {
-                    console.error(error)
+                    console.log("Error occurred while sending request", error);
                 }
             }
             this.editUser = null
-            this.editedFirstName = ''
-            this.editedLastName = ''
-            this.editedEmail = ''
-            this.editedPassword = ''
+            this.editedUser = {
+                id: '',
+                firstName: '',
+                lastName: '',
+                email: '',
+                pwd: '',
+            }
         },
         async deleteUser() {
             if(this.editUser !== null) {
-                let originalIndex = this.userItems.indexOf(this.editUser)
                 try {
-                    await axios.delete(`http://localhost:10000/delete-user/${originalIndex}`)
+                    await axios.delete(`http://localhost:10000/delete-user/${this.editedUser.id}`)
+                    console.log(`http://localhost:10000/delete-user/${this.editedUser.id}`)
                     this.getUsers()
                 } catch (error) {
                     console.error(error)
                 }
             }
             this.editUser = null
-            this.editedFirstName = ''
-            this.editedLastName = ''
-            this.editedEmail = ''
-            this.editedPassword = ''
+            this.editedUser = {
+                id: '',
+                firstName: '',
+                lastName: '',
+                email: '',
+                pwd: '',
+            }
         },
     },
     computed: {
@@ -160,7 +188,8 @@ export default {
             if (this.searchQuery) {
                 this.editUser = null
                 sortedUsers = sortedUsers.filter(item =>
-                    item.firstName && item.firstName.toLowerCase().includes(this.searchQuery.toLowerCase())
+                    (item.firstName && item.firstName.toLowerCase().includes(this.searchQuery.toLowerCase())) ||
+                    (item.lastName && item.lastName.toLowerCase().includes(this.searchQuery.toLowerCase()))
                 )
             }
             if (this.sortOrder === 'asc') {
@@ -188,6 +217,7 @@ export default {
 <style>
     .title {
         margin: 10px 0 10px;
+        background-color: darkslategray;
     }
     .newUser, .addUser, .saveUser, .closeUser, .deleteUser, .closeUser {
         font-size: 17px;
@@ -204,6 +234,25 @@ export default {
     }
     .addUser {
         margin-top: 20px;
+    }
+    .inputField {
+        position: relative;
+        margin-bottom: 20px;
+    }
+    .inputField input {
+        width: 100%;
+        padding: 10px;
+        padding-left: 80px;
+    }
+    .inputField label {
+        position: absolute;
+        left: 5px;
+        top: -66%;
+        background-color: #122020;
+        border: 1px solid darkslategray;
+        border-radius: 5px;
+        transform: translateY(-50%);
+        padding: 0 5px;
     }
     .saveUser, .closeUser, .deleteUser {
         margin-top: 10px;

@@ -2,6 +2,15 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+  header('Access-Control-Allow-Origin: http://localhost:8080');
+  header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+  header('Access-Control-Allow-Headers: X-Requested-With, Content-Type');
+  header('Access-Control-Allow-Credentials: true');
+  exit;
+}
+
 /**
  * router.php
  *
@@ -44,7 +53,7 @@ function saveData($dbFile, $data) {
 function getJsonRequest() {
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $JSON = file_get_contents("php://input");
-    return json_decode($JSON);
+    return json_decode($JSON, true);
   } else {
     sendResponse(['error' => 'use POST method', 405]);
     die();
@@ -57,7 +66,7 @@ function getJsonRequest() {
  */
 function sendResponse($data, $response_code = 200) {
   header('Content-Type: application/json', true, $response_code);
-  header('Access-Control-Allow-Origin: *');
+  header('Access-Control-Allow-Origin: http://localhost:8080');
   header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
   header('Access-Control-Allow-Headers: X-Requested-With, Content-Type');
 
@@ -73,8 +82,6 @@ function sendResponse($data, $response_code = 200) {
 //list($action, $table) = sscanf($_SERVER['REQUEST_URI'], '/%[^-]-%s');
 list($action, $table, $id) = sscanf($_SERVER['REQUEST_URI'], '/%[^-]-%[^/]/%d');
 $dbFile = "{$dataDir}/{$table}.serialized";
-
-
 
 switch ($action) {
   // Load Data
@@ -94,9 +101,9 @@ switch ($action) {
     $data = loadData($dbFile);
 
     if (array_key_exists($id, $data)) {
-      $newData = getJsonRequest();
+      $newData = (array) getJsonRequest();
       $newData['last-modified'] = date('H:i:s');
-      $data[$id] = array_merge($data[$id], $newData);
+      $data[$id] = array_merge((array) $data[$id], $newData);
       saveData($dbFile, $data);
 
       sendResponse($data[$id]);
