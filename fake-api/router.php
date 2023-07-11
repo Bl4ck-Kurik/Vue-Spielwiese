@@ -142,6 +142,46 @@ switch ($action) {
     break;
   }
 
+  case 'add-file': {
+    if($_FILES['file']){
+      var_dump($_FILES['file']);
+      var_dump($_FILES['file']['error']);
+      $errors= array();
+      $file_name = $_FILES['file']['name'];
+      $file_size =$_FILES['file']['size'];
+      $file_tmp =$_FILES['file']['tmp_name'];
+      $file_type=$_FILES['file']['type'];
+      
+      $file_ext=strtolower(end(explode('.',$_FILES['file']['name'])));
+      
+      $extensions= array("jpeg","jpg","png");
+      
+      if(in_array($file_ext,$extensions)=== false){
+          $errors[]="Extension not allowed, please choose a JPEG or PNG file.";
+      }
+      
+      if($file_size > 2097152){
+          $errors[]='File size must be less than 2 MB';
+      }
+      
+      if(empty($errors)==true){
+          $file_path = "uploads/".$file_name;
+          move_uploaded_file($file_tmp,$file_path);
+          var_dump(move_uploaded_file($file_tmp,$file_path));
+          $fileURL = "http://localhost:10000/uploads/" . $file_name;
+          $fileData = ['fileName' => $file_name, 'fileURL' => $fileURL, 'fileSize' => $file_size, 'fileType' => $file_type];
+          $data = loadData($dbFile);
+          $data[] = $fileData;
+          saveData($dbFile, $data);
+          sendResponse(['fileURL' => $fileURL, 'id' => end(array_keys($data))], 201);
+      }else{
+          sendResponse(['error' => $errors], 400);
+      }
+    }
+    break;
+}
+
+
   default: {
     sendResponse(['error' => "Unknown Action {$action} {$table}"], 405);
   }

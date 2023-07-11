@@ -38,6 +38,10 @@ export default {
           link: "/notes",
         },
         {
+          label: "File Upload",
+          link: "/files",
+        },
+        {
           label: "Ninja React Timer",
           link: "/ninja",
         },

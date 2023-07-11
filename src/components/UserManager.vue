@@ -10,10 +10,10 @@
         </select>
       </div>
       <div class="newUserInput" v-if="showNewUser">
-        <input class="title" type="text" placeholder="First Name" v-model="newUser.firstName">
-        <input class="title" type="text" placeholder="Name" v-model="newUser.lastName">
-        <input class="title" type="email" placeholder="E-Mail" v-model="newUser.email">
-        <input class="title" type="password" placeholder="Password" v-model="newUser.pwd">
+        <input class="title" type="text" placeholder="First Name" v-model="newUser.firstName" :class="{ warning: emptyFields.firstName }">
+        <input class="title" type="text" placeholder="Name" v-model="newUser.lastName" :class="{ warning: emptyFields.lastName }">
+        <input class="title" type="email" placeholder="E-Mail" v-model="newUser.email" :class="{ warning: emptyFields.email }">
+        <input class="title" type="password" placeholder="Password" v-model="newUser.pwd" :class="{ warning: emptyFields.pwd }">
         <div class="editButtons">
           <button class="addUser" @click="addUser">Add User</button>
           <button class="closeUser" @click="showUsers">Close</button>
@@ -25,19 +25,19 @@
             <div>
                 <div>
                     <div class="inputField">
-                        <input type="text" id="firstName" v-model="editedUser.firstName">
+                        <input type="text" id="firstName" v-model="editedUser.firstName" :class="{ 'error-input': isFirstNameEmpty }">
                         <label for="firstName">First Name</label>
                     </div>
                     <div class="inputField">
-                        <input type="text" id="lastName" v-model="editedUser.lastName">
+                        <input type="text" id="lastName" v-model="editedUser.lastName" :class="{ 'error-input': isLastNameEmpty }">
                         <label for="lastName">Last Name</label>
                     </div>
                     <div class="inputField">
-                        <input type="email" id="email" v-model="editedUser.email">
+                        <input type="email" id="email" v-model="editedUser.email" :class="{ 'error-input': isEmailEmpty }">
                         <label for="email">Email</label>
                     </div>
                     <div class="inputField">
-                        <input type="text" id="pwd" v-model="editedUser.pwd">
+                        <input type="text" id="pwd" v-model="editedUser.pwd" :class="{ 'error-input': isPasswordEmpty }">
                         <label for="pwd">Password</label>
                     </div>
                 </div>
@@ -79,6 +79,13 @@ export default {
                 email: '',
                 pwd: '',
             },
+            emptyFields: {
+                firstName: false,
+                lastName: false,
+                email: false,
+                pwd: false,
+            },
+            errors: {},
             userItems: [],
             editUser: null,
         }
@@ -114,8 +121,17 @@ export default {
             this.showNewUser = !this.showNewUser
         },
         async addUser () {
+            this.emptyFields = {
+                firstName: !this.newUser.firstName,
+                lastName: !this.newUser.lastName,
+                email: !this.newUser.email,
+                pwd: !this.newUser.pwd,
+            }
+            if (Object.values(this.emptyFields).includes(true)) {
+                return
+            }
             this.editUser = null
-            if (this.newUser.firstName && this.newUser.lastName) {
+            if (this.newUser.firstName && this.newUser.lastName && this.newUser.email && this.newUser.pwd) {
                 try {
                     await axios.post('http://localhost:10000/add-user', this.newUser)
                     this.getUsers()
@@ -144,22 +160,28 @@ export default {
         },
         async saveUser() {
             if(this.editUser !== null) {
-                try {
-                    console.log("Sending request");
-                    const response = await axios.post(`http://localhost:10000/update-user/${this.editedUser.id}`, this.editedUser);
-                    console.log("Received response", response);
-                    this.getUsers();
-                } catch (error) {
-                    console.log("Error occurred while sending request", error);
+                this.errors = {};
+                if (!this.editedUser.firstName) this.errors.firstName = 'First Name cannot be empty'
+                if (!this.editedUser.lastName) this.errors.lastName = 'Last Name cannot be empty'
+                if (!this.editedUser.email) this.errors.email = 'Email cannot be empty'
+                if (!this.editedUser.pwd) this.errors.pwd = 'Password cannot be empty'
+                if (this.editedUser.firstName && this.editedUser.lastName && this.editedUser.email && this.editedUser.pwd) {
+                    try {
+                        const response = await axios.post(`http://localhost:10000/update-user/${this.editedUser.id}`, this.editedUser);
+                        console.log("Received response", response);
+                        this.getUsers();
+                    } catch (error) {
+                        console.log("Error occurred while sending request", error);
+                    }
+                    this.editUser = null;
+                    this.editedUser = {
+                        id: '',
+                        firstName: '',
+                        lastName: '',
+                        email: '',
+                        pwd: '',
+                    }
                 }
-            }
-            this.editUser = null
-            this.editedUser = {
-                id: '',
-                firstName: '',
-                lastName: '',
-                email: '',
-                pwd: '',
             }
         },
         async deleteUser() {
@@ -210,7 +232,19 @@ export default {
                 })
             }
             return sortedUsers
-        }
+        },
+        isFirstNameEmpty() {
+            return this.editedUser.firstName === '';
+        },
+        isLastNameEmpty() {
+            return this.editedUser.lastName === '';
+        },
+        isEmailEmpty() {
+            return this.editedUser.email === '';
+        },
+        isPasswordEmpty() {
+            return this.editedUser.pwd === '';
+        },
     },
 }
 </script>
@@ -268,6 +302,9 @@ export default {
     .saveUser, .addUser {
         color: rgb(1, 54, 1);
         background-color: rgb(125, 223, 125);
+    }
+    .error-input, .warning {
+        border: 1px solid #ff5555 !important;
     }
     .user {
         margin-top: 20px;
