@@ -123,6 +123,7 @@ switch ($action) {
         end($data);
         $last_id = key($data);
         sendResponse(['id' => $last_id], 201);
+        error_log("Inside add case");
         break;
 
     case 'delete':
