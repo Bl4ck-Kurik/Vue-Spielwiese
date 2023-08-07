@@ -2,7 +2,7 @@
     <div>
         <FileUploadV2/>
         <div style="height: 50px;"></div>
-        <FileUpload/>
+        <!-- <FileUpload/> -->
     </div>
 </template>
 <script>

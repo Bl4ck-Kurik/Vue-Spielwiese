@@ -1,6 +1,8 @@
 .DS_Store
 node_modules
 /dist
+fake-api/uploads/*
+!fake-api/uploads/.gitkeep
 
 
 # local env files
