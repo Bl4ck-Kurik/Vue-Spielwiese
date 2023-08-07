@@ -1,6 +1,8 @@
 import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
-import App from '@/App.vue'
+import App from './App.vue'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 
 import Ninja from "@/views/NinjaView.vue"
 import Modal from "@/views/ModalView.vue"
@@ -26,5 +28,6 @@ const router = createRouter({
 })
 
 const app = createApp(App)
+app.use(VueAxios, axios)  
 app.use(router)
 app.mount('#app')
