@@ -1,6 +1,11 @@
 <template>
     <div>
       <h2 style="margin-top: 30px;">User Manager</h2>
+      <div style="margin-bottom: 20px;">
+        <button @click="showArray=!showArray">Show Array</button>
+        <br>
+        <span v-if="showArray">{{ userItems }}</span>
+      </div>
       <button class="newUser" @click="showUsers">New User</button>
       <div class="search">
         <input type="text" v-model="searchQuery" placeholder="Search">
@@ -12,7 +17,7 @@
       <div class="newUserInput" v-if="showNewUser">
         <input class="title" type="text" placeholder="First Name" v-model="newUser.firstName" :class="{ warning: emptyFields.firstName }">
         <input class="title" type="text" placeholder="Name" v-model="newUser.lastName" :class="{ warning: emptyFields.lastName }">
-        <input class="title" type="email" placeholder="E-Mail" v-model="newUser.email" :class="{ warning: emptyFields.email }">
+        <input class="title" type="email" placeholder="E-Mail" v-model="newUser.email" :class="{ warning: emptyFields.email || emailExists }">
         <input class="title" type="password" placeholder="Password" v-model="newUser.pwd" :class="{ warning: emptyFields.pwd }">
         <div class="editButtons">
           <button class="addUser" @click="addUser">Add User</button>
@@ -67,6 +72,7 @@ export default {
             searchQuery: '',
             sortOrder: 'asc',
             showNewUser: false,
+            showArray: false,
             editedUser: {
                 firstName: '',
                 lastName: '',
@@ -85,6 +91,7 @@ export default {
                 email: false,
                 pwd: false,
             },
+            emailExists: false,
             errors: {},
             userItems: [],
             editUser: null,
@@ -94,6 +101,9 @@ export default {
         this.getUsers()
     },
     methods: {
+        userExists(email) {
+            return this.userItems.some(user => user.email === email)
+        },
         async getUsers() {
             try {
                 const response = await axios.get('http://localhost:10000/get-user')
@@ -119,8 +129,9 @@ export default {
             }
             this.editUser = null
             this.showNewUser = !this.showNewUser
+            this.emailExists = false
         },
-        async addUser () {
+        async addUser() {
             this.emptyFields = {
                 firstName: !this.newUser.firstName,
                 lastName: !this.newUser.lastName,
@@ -129,6 +140,13 @@ export default {
             }
             if (Object.values(this.emptyFields).includes(true)) {
                 return
+            }
+            if (this.userExists(this.newUser.email)) {
+                this.emailExists = true
+                this.errors.email = 'Email already exists'
+                return
+            } else {
+                this.emailExists = false
             }
             this.editUser = null
             if (this.newUser.firstName && this.newUser.lastName && this.newUser.email && this.newUser.pwd) {
@@ -147,7 +165,8 @@ export default {
                 this.editUser = null
                 this.showNewUser = false
             }
-        },
+            },
+
         editUserIndex(index) {
             this.editUser = this.searchResult[index]
             this.editedUser = {
