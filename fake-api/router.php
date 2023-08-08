@@ -5,6 +5,22 @@ error_reporting(E_ALL);
 
 header('Access-Control-Allow-Origin: *');  // Allowing all origins for testing purposes
 
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    // Allow any headers the client may need
+    header('Access-Control-Allow-Headers: Content-Type, X-Requested-With');
+    
+    // Allow any HTTP verb (GET, POST, PUT, DELETE, etc.)
+    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+    
+    // If needed, you can also set how long the browser should cache the preflight results
+    header('Access-Control-Max-Age: 86400');  // 24 hours
+    
+    // End script processing by sending a 204 No Content response.
+    header('HTTP/1.1 204 No Content');
+    exit;
+}
+
+
 $dataDir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'data';
 $uploadDir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'uploads';
 
@@ -117,8 +133,13 @@ switch ($action) {
         break;
 
     case 'add':
+        $requestData = getJsonRequest();
+        if (empty($requestData)) {
+            sendResponse(['error' => 'Empty data received'], 400);
+            exit;
+        }
         $data = loadData($dbFile) ?: [];
-        $data[] = getJsonRequest();
+        $data[] = $requestData;
         saveData($dbFile, $data);
         end($data);
         $last_id = key($data);

@@ -3,6 +3,8 @@ node_modules
 /dist
 fake-api/uploads/*
 !fake-api/uploads/.gitkeep
+fake-api/data/*
+!fake-api/data/.gitkeep
 
 
 # local env files

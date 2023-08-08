@@ -29,15 +29,17 @@
                 }
                 this.loading = true
                 let formData = new FormData()
-                formData.append('file', this.file)
+                let blob = this.file.slice(0, this.file.size, this.file.type)
+                let newFile = new File([blob], Date.now() + '.' + this.file.type.split('/').pop())
+                formData.append('file', newFile)
                 this.axios.post(
-                'http://localhost:10000/add-file',
-                formData,
-                {
-                    headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'http://localhost:10000/add-file',
+                    formData,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
                     }
-                }
                 )
                 .then((data) => {
                     this.loading = false
@@ -48,7 +50,7 @@
                 .catch((error) => {
                     this.loading = false
                     console.log('Failure', error)
-                });
+                })
             },
             onChangeFileUpload() {
                 this.file = this.$refs.file.files[0]
