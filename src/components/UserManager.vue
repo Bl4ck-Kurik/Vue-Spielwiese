@@ -4,7 +4,7 @@
       <div style="margin-bottom: 20px;">
         <button @click="showArray=!showArray">Show Array</button>
         <br>
-        <span v-if="showArray">{{ userItems }}</span>
+        <pre class="array" v-if="showArray">{{ userItems }}</pre>
       </div>
       <button class="newUser" @click="showUsers">New User</button>
       <div class="search">
@@ -373,5 +373,12 @@ export default {
     }
     .search select {
         width: 20%;
+    }
+    .array {
+        text-align: left; 
+        margin: 20px 250px;
+        padding: 10px;
+        background-color: rgba(47, 79, 79, 0.5);
+        border-radius: 7px;
     }
 </style>
