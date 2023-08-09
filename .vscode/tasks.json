@@ -22,7 +22,7 @@
             }
         },
         {
-            "label": "Run Both",
+            "label": "Run Dev", //ctrl + alt + b
             "dependsOn": ["npm run serve", "run PHP server"],
             "group": {
                 "kind": "build",
