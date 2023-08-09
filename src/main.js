@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
+import { plugin, defaultConfig } from '@formkit/vue'
 import App from './App.vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
@@ -30,4 +31,5 @@ const router = createRouter({
 const app = createApp(App)
 app.use(VueAxios, axios)  
 app.use(router)
+app.use(plugin, defaultConfig)
 app.mount('#app')
