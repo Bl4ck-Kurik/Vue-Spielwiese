@@ -42,6 +42,10 @@ export default {
           link: "/files",
         },
         {
+          label: "FormKit Playground",
+          link: "/form-kit",
+        },
+        {
           label: "Ninja React Timer",
           link: "/ninja",
         },

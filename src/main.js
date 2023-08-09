@@ -11,6 +11,7 @@ import Signup from "@/views/SignupView.vue"
 import Todo from "@/views/TodoView.vue"
 import Note from "@/views/NoteView.vue"
 import File from "@/views/FileView.vue"
+import FormKit from "@/views/FormKitView.vue"
 
 import '@/assets/global.css'
 
@@ -21,6 +22,7 @@ const routes = [
   { path: '/todo', component: Todo },
   { path: '/notes', component: Note },
   { path: '/files', component: File },
+  { path: '/form-kit', component: FormKit },
 ]
 
 const router = createRouter({
