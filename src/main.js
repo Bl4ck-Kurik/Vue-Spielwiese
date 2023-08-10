@@ -14,6 +14,7 @@ import File from "@/views/FileView.vue"
 import FormKit from "@/views/FormKitView.vue"
 
 import '@/assets/global.css'
+import '@formkit/themes/genesis'
 
 const routes = [
   { path: '/ninja', component: Ninja },

@@ -97,3 +97,10 @@ textarea {
     border-radius: 7px;  
     font-family: Avenir, Helvetica, Arial, sans-serif;
 }
+.formkit-outer * {
+    color: white !important;
+}
+.formkit-inner *::selection {
+    background-color: rgb(230, 160, 230) !important;
+    color: rgb(70, 0, 70) !important;
+}
