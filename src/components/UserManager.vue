@@ -8,7 +8,16 @@
       </div>
       <button class="newUser" @click="showUsers">New User</button>
       <div class="search">
+        <!-- <FormKit type="search" placeholder="Search" Label="Search" v-model="searchQuery"></FormKit> -->
         <input type="text" v-model="searchQuery" placeholder="Search">
+        <!-- <FormKit 
+            type="select"
+            v-model="sortOrder"
+            :options="{
+                asc: 'Ascending',
+                desc: 'Descending'
+            }"
+        ></FormKit> -->
         <select v-model="sortOrder">
           <option value="asc">Ascending</option>
           <option value="desc">Descending</option>
