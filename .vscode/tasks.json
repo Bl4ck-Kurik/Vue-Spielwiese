@@ -2,20 +2,20 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "npm run serve",
+            "label": "run PHP server",
             "type": "shell",
-            "command": "npm",
-            "args": ["run", "serve"],
+            "command": "php",
+            "args": ["-S", "0.0.0.0:10000", "fake-api/router.php"],
             "presentation": {
                 "reveal": "always",
                 "panel": "shared"
             }
         },
         {
-            "label": "run PHP server",
+            "label": "npm run serve",
             "type": "shell",
-            "command": "php",
-            "args": ["-S", "0.0.0.0:10000", "fake-api/router.php"],
+            "command": "npm",
+            "args": ["run", "serve"],
             "presentation": {
                 "reveal": "always",
                 "panel": "shared"

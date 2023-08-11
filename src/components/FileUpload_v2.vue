@@ -39,7 +39,7 @@
                 let newFile = new File([blob], Date.now() + '.' + this.file.type.split('/').pop())
                 formData.append('file', newFile)
                 this.axios.post(
-                    'http://localhost:10000/add-file',
+                    'http://localhost:10000/addfile',
                     formData,
                     {
                         headers: {
