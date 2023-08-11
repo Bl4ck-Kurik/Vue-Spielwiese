@@ -26,7 +26,6 @@
                 }
             }
         },
-
         methods: {
             submitForm() {
                 if (!this.file) {
