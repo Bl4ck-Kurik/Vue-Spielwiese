@@ -13,6 +13,8 @@
 </template>
   
 <script>
+    import EventBus from "@/utils/EventBus"
+
     export default {
         data() {
             return {
@@ -48,9 +50,10 @@
                 )
                 .then((data) => {
                     this.loading = false
-                    console.log(data.data)
+                    console.log(data)
                     this.$refs.file.value = ""
                     this.file = null
+                    EventBus.emit('fileUploaded')
                 })
                 .catch((error) => {
                     this.loading = false

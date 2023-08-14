@@ -32,3 +32,22 @@ class EventBus {
 }
 
 export default new EventBus();  
+
+
+/*
+import EventBus from "@/utils/EventBus"
+_________________________________________________
+Sending:
+
+EventBus.emit('message')
+
+_________________________________________________
+Receiving and calling a method:
+
+mounted () {    
+    EventBus.on('message', this.methodToBeExecuted)
+},
+beforeUnmount() {
+    EventBus.off('message', this.methodToBeExecuted)
+},
+*/

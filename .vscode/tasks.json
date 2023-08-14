@@ -22,11 +22,19 @@
             }
         },
         {
-            "label": "Run Dev", //ctrl + alt + b
+            "label": "Run Dev",
             "dependsOn": ["npm run serve", "run PHP server"],
             "group": {
                 "kind": "build",
                 "isDefault": true
+            /*
+            {
+                "key": "ctrl+alt+b",
+                "command": "workbench.action.tasks.runTask",
+                "args": "Run Dev"
+            }        
+            */
+            
             }
         }
     ]

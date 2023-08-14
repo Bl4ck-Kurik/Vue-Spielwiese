@@ -59,6 +59,16 @@ function sendResponse($data, $response_code = 200) {
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && strpos($_SERVER['REQUEST_URI'], '/get-image') === 0) {
     $action = 'get-image';
     $image = explode( "/", $_SERVER['REQUEST_URI']);
+} elseif (($_SERVER['REQUEST_METHOD'] == 'DELETE' && strpos($_SERVER['REQUEST_URI'], '/deletefile/') === 0)) {
+    $action = 'deletefile';
+    $filenamePattern = '/deletefile\/(.+)$/';
+    if (preg_match($filenamePattern, $_SERVER['REQUEST_URI'], $matches)) {
+        $file_name = $matches[1];
+        echo $file_name;
+    } else {
+        echo "Invalid endpoint.";
+        exit;
+    }
 } else {
     list($action, $table, $id) = array_pad(sscanf($_SERVER['REQUEST_URI'], '/%[^-]-%[^/]/%s'), 3, null);
     $dbFile = "{$dataDir}/{$table}.serialized";
@@ -102,6 +112,26 @@ switch ($action) {
             }
         } else {
             echo "No file uploaded.";
+            exit;
+        }
+        break;
+    }
+
+    case 'deletefile': {
+        error_log("Inside delete-file case");
+        
+        $file_path = $uploadDir . DIRECTORY_SEPARATOR . $file_name;
+        echo $file_name;
+        if (file_exists($file_path)) {
+            if (unlink($file_path)) {
+                echo " File deleted successfully";
+                exit;
+            } else {
+                echo "File deletion failed: " . error_get_last()['message'];
+                exit;
+            }
+        } else {
+            echo "File does not exist.";
             exit;
         }
         break;

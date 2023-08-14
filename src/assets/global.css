@@ -43,8 +43,12 @@ button[disabled]{
     cursor: not-allowed;
 }
 button.large-button {
-    padding: 10px 15px;
-    font-size: 16px;
+    padding: 7px;
+    font-size: 20px;
+}
+button.red {
+    background-color: #e06b63;
+    color: #4e0702;
 }
 ::placeholder {
     color: rgb(155, 184, 184);
