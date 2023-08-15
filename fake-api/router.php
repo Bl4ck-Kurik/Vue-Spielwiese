@@ -87,15 +87,15 @@ switch ($action) {
             $file_parts = explode('.', $_FILES['file']['name']);
             $file_ext = strtolower(end($file_parts));
             
-            $extensions = array("jpeg", "jpg", "png");
+            // $extensions = array("jpeg", "jpg", "png");
 
-            if (in_array($file_ext, $extensions) === false) {
-                $errors[] = "Extension not allowed, please choose a JPEG or PNG file.";
-            }
+            // if (in_array($file_ext, $extensions) === false) {
+            //     $errors[] = "Extension not allowed, please choose a JPEG or PNG file.";
+            // }
 
-            if ($file_size > 2097152) {
-                $errors[] = 'File size must be less than 2MB';
-            }
+            // if ($file_size > 2097152) {
+            //     $errors[] = 'File size must be less than 2MB';
+            // }
 
             if (empty($errors) == true) {
                 $file_path = $uploadDir . DIRECTORY_SEPARATOR . $file_name;

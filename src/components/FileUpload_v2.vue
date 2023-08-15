@@ -2,6 +2,7 @@
     <div class="container">
         <div class="large-12 medium-12 small-12 cell">
             <h1>Image Upload using Vue and PHP</h1>
+            <pre>{{ settings }}</pre>
             <div class="inputWrapper" :class="{ pseudoWarning: warnings.size || warnings.type}" :style="{ '--content': `'${pseudoContent}'` }">
                 <input type="file" id="file" class="uploadInput" :class="{ warning: warnings.size || warnings.type}" ref="file" @change="onChangeFileUpload()"/>
             </div>
@@ -28,6 +29,34 @@
                 }
             }
         },
+        props: {
+            settings: {
+                type: Object,
+                required: true,
+                default: function () {
+                    return { type: 'image', mime: [], size: 2, endpointURL: '', msgType: '', msgSize: ''}
+                },
+                validator: function (value) {
+                    if (typeof value !== 'object') return false
+                    
+                    if (!value.type) value.type = 'image'
+                    if (!value.mime) value.mime = []
+                    if (!value.size) value.size = 2
+                    if (!value.endpointURL) value.endpointURL = ''
+                    if (!value.msgType) value.msgType = ''
+                    if (!value.msgSize) value.msgSize = ''
+
+                    return (
+                        typeof value.type === 'string' &&
+                        Array.isArray(value.mime) &&
+                        typeof value.size === 'number' &&
+                        typeof value.endpointURL === 'string' &&
+                        typeof value.msgType === 'string' &&
+                        typeof value.msgSize === 'string'
+                    )
+                }
+            }
+        },
         methods: {
             submitForm() {
                 if (!this.file) {
@@ -39,15 +68,17 @@
                 let blob = this.file.slice(0, this.file.size, this.file.type)
                 let newFile = new File([blob], Date.now() + '.' + this.file.type.split('/').pop())
                 formData.append('file', newFile)
-                this.axios.post(
-                    'http://localhost:10000/addfile',
-                    formData,
-                    {
+                let endpoint = ''
+                if (!this.settings.endpointURL) {
+                    endpoint = 'http://localhost:10000/addfile'
+                } else {
+                    endpoint = this.settings.endpointURL
+                }
+                this.axios.post(endpoint, formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }
-                    }
-                )
+                    })
                 .then((data) => {
                     this.loading = false
                     console.log(data)
@@ -64,19 +95,40 @@
                 this.warnings.size = false
                 this.warnings.type = false
                 const selectedFile = this.$refs.file.files[0]
-                if (!selectedFile) return
-                const allowedTypes = ['image/jpeg', 'image/png']
+                if (!selectedFile) return 
+                let allowedTypes = []
+                if (!this.settings.mime) {
+                    if (this.settings.type.includes('image')) {
+                        allowedTypes = [...allowedTypes, 'image/jpeg', 'image/png']
+                    }
+                    if (this.settings.type.includes('doc')) {
+                        allowedTypes = [...allowedTypes, 'application/pdf']
+                    }
+                } else {
+                    allowedTypes = [...this.settings.mime]
+                }
                 if (!allowedTypes.includes(selectedFile.type)) {
                     this.warnings.type = true
-                    this.pseudoContent = 'Invalid file type! Please upload an image (JPG, PNG).'
+                    const formattedTypes = allowedTypes.map(type => {
+                        return type.split('/').pop().toUpperCase()
+                    }).join(', ')
+                    if (!this.settings.msgType) {
+                        this.pseudoContent = 'Invalid file type! Please upload an ' + formattedTypes + '.'
+                    } else {
+                        this.pseudoContent = this.settings.msgType
+                    }
                     console.error("Invalid file type!")
                     this.file = null
                     return
                 }
                 const sizeInMB = (selectedFile.size / 1_048_576).toFixed(2)
-                if (parseFloat(sizeInMB) >= 2) {
+                if (parseFloat(sizeInMB) >= this.settings.size) {
                     this.warnings.size = true
-                    this.pseudoContent = 'File cant be larger than 2MB!'
+                    if (!this.settings.msgSize) {
+                        this.pseudoContent = 'File cant be larger than ' + this.settings.size + 'MB!'
+                    } else {
+                        this.pseudoContent = this.settings.msgSize
+                    }
                     console.error("File is too big!")
                     this.file = null
                     return
