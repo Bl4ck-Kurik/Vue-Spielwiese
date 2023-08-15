@@ -16,8 +16,8 @@ export default {
         return {
             FileSettings: {
                 type: 'image doc',
-                size: 4,
-                mime: ['image/png', 'application/pdf'],
+                size: 2,
+                // mime: ['image/png', 'application/pdf'],
                 // endpointURL: 'http://test.test/test',
                 // msgType: 'Nur Videos (MP4)!',
                 // msgSize: 'Nicht größer als 100MB!'

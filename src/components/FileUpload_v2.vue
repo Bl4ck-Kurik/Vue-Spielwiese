@@ -97,13 +97,14 @@
                 const selectedFile = this.$refs.file.files[0]
                 if (!selectedFile) return 
                 let allowedTypes = []
-                if (!this.settings.mime) {
+                if (this.settings.mime.length === 0) {
                     if (this.settings.type.includes('image')) {
                         allowedTypes = [...allowedTypes, 'image/jpeg', 'image/png']
                     }
                     if (this.settings.type.includes('doc')) {
                         allowedTypes = [...allowedTypes, 'application/pdf']
                     }
+                    console.log(allowedTypes)
                 } else {
                     allowedTypes = [...this.settings.mime]
                 }
