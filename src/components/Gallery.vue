@@ -1,5 +1,5 @@
 <template>
-    <div v-if="imageLarge.state" @click="imageLarge.state = false" class="image-large">
+    <div v-if="imageLarge.state" @click="imageLarge.state = false, deleteButton=false" class="image-large">
         <img :src="imageLarge.url">
         <button class="large-button red" v-if="!deleteButton" @click.stop="deleteButton=true">Delete</button>
         <div class="deleteButtons" v-if="deleteButton">
