@@ -11,12 +11,14 @@
     "@formkit/vue": "^0.17.5",
     "axios": "^1.4.0",
     "core-js": "^3.8.3",
+    "pdfjs-dist": "^3.9.179",
     "vue": "^3.2.13",
     "vue-axios": "^3.5.2",
     "vue-router": "^4.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
+    "@babel/plugin-transform-private-methods": "^7.22.5",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-router": "~5.0.0",
     "@vue/cli-service": "~5.0.0"

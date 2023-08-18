@@ -59,6 +59,9 @@ function sendResponse($data, $response_code = 200) {
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && strpos($_SERVER['REQUEST_URI'], '/get-image') === 0) {
     $action = 'get-image';
     $image = explode( "/", $_SERVER['REQUEST_URI']);
+} elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && strpos($_SERVER['REQUEST_URI'], '/get-pdf') === 0) {
+    $action = 'get-pdf';
+    $requestSegments = explode("/", $_SERVER['REQUEST_URI']);
 } elseif (($_SERVER['REQUEST_METHOD'] == 'DELETE' && strpos($_SERVER['REQUEST_URI'], '/deletefile/') === 0)) {
     $action = 'deletefile';
     $filenamePattern = '/deletefile\/(.+)$/';
@@ -167,6 +170,40 @@ switch ($action) {
         } else {
             header("HTTP/1.0 404 Not Found");
             echo "Image not found.";
+            exit;
+        }
+        break;
+    }
+
+    case 'listpdf': {
+        $files = glob($uploadDir . DIRECTORY_SEPARATOR . '*.pdf');
+        $fileNames = array_map('basename', $files); 
+        
+        error_log("Files found: " . implode(", ", $fileNames));
+
+        $pdfUrls = array_map(function($fileName) {
+            error_log("File=" . $fileName);
+            return "http://localhost:10000/get-pdf/$fileName";
+        }, $fileNames);
+    
+        header('Content-Type: application/json');
+        echo json_encode($pdfUrls);
+        exit;
+        break;
+    }
+
+    case 'get-pdf': {
+        $pdfName = $requestSegments[2]; 
+    
+        $filePath = $uploadDir . DIRECTORY_SEPARATOR . $pdfName;
+
+        if (file_exists($filePath)) {
+            header("Content-Type: application/pdf");
+            readfile($filePath);
+            exit;
+        } else {
+            header("HTTP/1.0 404 Not Found");
+            echo "PDF not found.";
             exit;
         }
         break;
