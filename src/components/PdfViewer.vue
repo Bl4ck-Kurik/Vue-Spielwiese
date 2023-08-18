@@ -30,7 +30,6 @@ export default {
                 console.log("Fetching PDF from:", src)
                 const pdf = await getDocument(src).promise
                 console.log("Fetched PDF:", pdf)
-
                 this.pdfData[index] = pdf;
                 if (pdf.numPages > 0) {
                     const page = await pdf.getPage(1)
