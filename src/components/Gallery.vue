@@ -67,10 +67,10 @@ export default {
         .catch(error => {
             console.error('Error fetching the images:', error)
         })
-        EventBus.on('fileUploaded', this.reloadFiles)
+        EventBus.on('imageUploaded', this.reloadFiles)
     },
     beforeUnmount() {
-        EventBus.off('fileUploaded', this.reloadFiles)
+        EventBus.off('imageUploaded', this.reloadFiles)
     },
 }
 </script>

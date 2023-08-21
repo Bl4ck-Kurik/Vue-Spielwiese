@@ -13,6 +13,7 @@ import FileUploadV2 from '@/components/FileUpload_v2.vue'
 import Gallery from '@/components/Gallery.vue'
 import PdfViewer from '@/components/PdfViewer.vue'
 import axios from 'axios'
+import EventBus from '@/utils/EventBus'
 
 export default {
     data() {
@@ -29,8 +30,10 @@ export default {
             pdfLoaded: false
         }
     },
-    mounted() {
-        axios.get('http://localhost:10000/listpdf')
+    methods: {
+        reloadFiles() {
+            this.pdfLoaded = false
+            axios.get('http://localhost:10000/listpdf')
             .then(response => {
                 console.log(response)
                 this.pdfs = response.data
@@ -38,7 +41,24 @@ export default {
             })
             .catch(error => {
                 console.error('Error fetching the PDFs:', error)
+                this.pdfLoaded = true
             })
+        }
+    },
+    mounted() {
+        axios.get('http://localhost:10000/listpdf')
+        .then(response => {
+            console.log(response)
+            this.pdfs = response.data
+            this.pdfLoaded = true
+        })
+        .catch(error => {
+            console.error('Error fetching the PDFs:', error)
+        })
+        EventBus.on('docUploaded', this.reloadFiles)
+    },
+    beforeUnmount() {
+        EventBus.off('docUploaded', this.reloadFiles)
     },
     components: {
         FileUpload,

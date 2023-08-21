@@ -1,6 +1,6 @@
 <template>
     <div class="pdf-wrapper">
-        <canvas v-for="(src, index) in src" :key="index" :ref="el => { pdfCanvas[index] = el }"></canvas>
+        <canvas @click="openPDF(src)" v-for="(src, index) in src" :key="index" :ref="el => { pdfCanvas[index] = el }"></canvas>
     </div>
 </template>
 
@@ -25,6 +25,9 @@ export default {
         };
     },
     methods: {
+        openPDF(clickedFile) {
+            window.open(clickedFile, '_blank');
+        },
         async renderPdf(src, index) {
             try {
                 console.log("Fetching PDF from:", src)

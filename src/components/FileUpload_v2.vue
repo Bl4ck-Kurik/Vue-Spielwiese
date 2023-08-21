@@ -23,6 +23,7 @@
                 fileSize: null,
                 loading: false,
                 pseudoContent: '',
+                selectedType: '',
                 warnings: {
                     size: false,
                     type: false,
@@ -84,7 +85,12 @@
                     console.log(data)
                     this.$refs.file.value = ""
                     this.file = null
-                    EventBus.emit('fileUploaded')
+                    if (this.selectedType.indexOf("image") !== -1) {
+                        EventBus.emit('imageUploaded')
+                    } 
+                    if (this.selectedType.indexOf("pdf") !== -1) {
+                        EventBus.emit('docUploaded')
+                    }
                 })
                 .catch((error) => {
                     this.loading = false
@@ -95,6 +101,7 @@
                 this.warnings.size = false
                 this.warnings.type = false
                 const selectedFile = this.$refs.file.files[0]
+                this.selectedType = selectedFile.type
                 if (!selectedFile) return 
                 let allowedTypes = []
                 if (this.settings.mime.length === 0) {
@@ -104,7 +111,6 @@
                     if (this.settings.type.includes('doc')) {
                         allowedTypes = [...allowedTypes, 'application/pdf']
                     }
-                    console.log(allowedTypes)
                 } else {
                     allowedTypes = [...this.settings.mime]
                 }
