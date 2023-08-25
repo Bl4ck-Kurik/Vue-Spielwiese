@@ -42,6 +42,10 @@ export default {
           link: "/files",
         },
         {
+          label: "Bingo",
+          link: "/bingo",
+        },
+        {
           label: "FormKit Playground",
           link: "/form-kit",
         },
