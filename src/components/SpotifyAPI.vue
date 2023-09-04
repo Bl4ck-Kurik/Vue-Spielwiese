@@ -1,24 +1,31 @@
 <template>
     <div>
-        <input class="urlInput" v-model="url" placeholder="Enter Spotify Playlist Link" />
-        <button class="fetchData large-button" @click="fetchPlaylistData">Fetch Playlist Data</button>
-        <div class="songList" v-if="playlistData">
-            <p v-for="(playlistTrackList, index) in playlistTrackList" :key="index" v-if="playlistData">{{ index + 1 }}: {{ playlistTrackList }}</p>
+        <div v-if="!playlistTrackList">
+            <input class="urlInput" v-model="url" placeholder="Enter Spotify Playlist Link" />
+            <button class="fetchData large-button" @click="fetchPlaylistData">Fetch Playlist Data</button>
+            <div class="songList" v-if="playlistData">
+                <p v-for="(playlistTrackList, index) in playlistTrackList" :key="index" v-if="playlistData">{{ index + 1 }}: {{ playlistTrackList }}</p>
+            </div>
         </div>
+        <BingoGrid :songs="playlistTrackList" v-if="playlistTrackList"/>
     </div>
-  </template>
+</template>
   
 <script>
 import axios from 'axios'
+import BingoGrid from '@/components/BingoGrid.vue'
 
 export default {
     name: 'SpotifyComponent',
+    components: {
+        BingoGrid
+    },
     data() {
         return {
             trackData: null,
             trackId: '',
             playlistData: null,
-            playlistTrackList: null,
+            playlistTrackList: '',
             url: '',
         }
     },
