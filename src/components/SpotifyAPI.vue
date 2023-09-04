@@ -62,34 +62,51 @@ export default {
             let allTracks = []
 
             try {
-                while (true) {
-                const response = await axios({
-                    method: 'get',
-                    url: `https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=${limit}&offset=${offset}`,
-                    headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                    },
-                })
-                allTracks = allTracks.concat(response.data.items)
-                if (response.data.items.length < limit) {
-                    break
+                let moreTracksAvailable = true;
+
+                while (moreTracksAvailable) {
+                    const response = await axios({
+                        method: 'get',
+                        url: `https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=${limit}&offset=${offset}`,
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`,
+                        },
+                    });
+
+                    // Append the fetched tracks to the allTracks array
+                    allTracks = allTracks.concat(response.data.items);
+
+                    // Check if there are more tracks to fetch
+                    if (response.data.items.length < limit) {
+                        moreTracksAvailable = false;
+                    } else {
+                        offset += limit;
+
+                        // Optional: Add a delay to avoid hitting rate limits
+                        await new Promise(resolve => setTimeout(resolve, 1000)); // 1 second delay
+                    }
                 }
-                offset += limit
-                }
+
                 this.playlistData = {
                     ...this.playlistData,
                     tracks: {
                         items: allTracks,
                     },
-                }
-                console.log(this.playlistData)
-                this.playlistTrackList = allTracks.map(item => {
-                const artistNames = item.track.artists.map(artist => artist.name).join(', ')
-                return `${item.track.name} by ${artistNames}`
-                })
+                };
+
+                console.log(this.playlistData);
+
+                let preTrackList = allTracks.map(item => {
+                    const artistNames = item.track.artists.map(artist => artist.name).join(', ');
+                    return `${item.track.name} by ${artistNames}`;
+                });
+
+                this.playlistTrackList = JSON.parse(JSON.stringify(preTrackList))
+
             } catch (error) {
-                console.error('Error fetching playlist data:', error)
+                console.error('Error fetching playlist data:', error);
             }
+
         }
     },
 }
